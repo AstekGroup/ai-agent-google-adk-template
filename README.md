@@ -1,8 +1,24 @@
 # Google ADK Template Repository
 
+[![GitHub](https://img.shields.io/badge/GitHub-AstekGroup-blue)](https://github.com/AstekGroup/ai-agent-google-adk-template)
+[![License](https://img.shields.io/badge/License-Educational-yellow)](LICENSE)
+
 **Date : Novembre 2025**
 
 Ce repository contient des templates complets pour créer des agents Google Agent Development Kit (ADK) en Python et Java, ainsi qu'une documentation exhaustive pour guider les développeurs et les IA.
+
+**Dépôt GitHub :** [https://github.com/AstekGroup/ai-agent-google-adk-template](https://github.com/AstekGroup/ai-agent-google-adk-template)
+
+## 🚀 Démarrage rapide
+
+```bash
+# Cloner le dépôt
+git clone https://github.com/AstekGroup/ai-agent-google-adk-template.git
+cd ai-agent-google-adk-template
+
+# Ou via SSH
+git clone git@github.com:AstekGroup/ai-agent-google-adk-template.git
+```
 
 ## Structure du repository
 
@@ -37,15 +53,16 @@ Ce repository contient des templates complets pour créer des agents Google Agen
 
 ### Pour les développeurs
 
-1. **Consulter la documentation** : Parcourir `resources/` pour comprendre Google ADK
-2. **Choisir un template** : Voir `templates/README.md` pour la liste
-3. **Copier et personnaliser** : Copier un template et l'adapter à vos besoins
+1. **Cloner le dépôt** : Utiliser `git clone` pour récupérer les templates
+2. **Consulter la documentation** : Parcourir `resources/` pour comprendre Google ADK
+3. **Choisir un template** : Voir `templates/README.md` pour la liste complète
+4. **Copier et personnaliser** : Copier un template et l'adapter à vos besoins
 
 ### Pour les IA assistants
 
 1. **Lire Agents.md** : Guide complet avec patterns et exemples
 2. **Référencer resources/** : Documentation exhaustive de l'API
-3. **Suivre les templates** : Exemples de code fonctionnels
+3. **Suivre les templates** : Exemples de code fonctionnels dans `templates/`
 
 ## Templates disponibles
 
@@ -105,12 +122,30 @@ python -c "from src.simple_agent.agent import root_agent; print(root_agent)"
 
 ## Contribution
 
-Pour ajouter un template :
+Ce dépôt est maintenu par l'organisation **AstekGroup**. Pour contribuer :
 
-1. Créer la structure dans `templates/python/` ou `templates/java/`
-2. Suivre le [Guide de création](templates/docs/CREATION_GUIDE.md)
-3. Ajouter une entrée dans `templates/README.md`
-4. Documenter dans le README du template
+### Processus de contribution
+
+1. **Forker le dépôt** ou créer une branche depuis `main`
+2. **Créer la structure** dans `templates/python/` ou `templates/java/`
+3. **Suivre le [Guide de création](templates/docs/CREATION_GUIDE.md)**
+4. **Ajouter une entrée** dans `templates/README.md`
+5. **Documenter** dans le README du template
+6. **Commiter et pousser** vos modifications
+7. **Créer une Pull Request** vers la branche `main`
+
+### Standards de code
+
+- Suivre les conventions de nommage Python/Java
+- Documenter le code avec des docstrings
+- Ajouter des tests unitaires pour chaque template
+- Maintenir la cohérence avec les templates existants
+
+### Structure Git
+
+- **Branche principale** : `main`
+- **Commits** : Utiliser des messages clairs et descriptifs
+- **Fichiers ignorés** : Vérifier `.gitignore` avant de committer
 
 ## Ressources externes
 
@@ -118,6 +153,20 @@ Pour ajouter un template :
 - [Exemples Google](https://github.com/google/adk-samples)
 - [Agent Starter Pack](https://github.com/GoogleCloudPlatform/agent-starter-pack)
 
-## Licence
+## 📋 Informations du dépôt
+
+- **Organisation** : [AstekGroup](https://github.com/AstekGroup)
+- **Branche principale** : `main`
+- **Dernière mise à jour** : Novembre 2025
+- **Statut** : Actif et maintenu
+
+## 📝 Licence
 
 Ces templates sont fournis à des fins éducatives et de développement. Consultez les licences des projets Google ADK pour plus d'informations.
+
+## 🤝 Support
+
+Pour toute question ou problème :
+- Ouvrir une [Issue](https://github.com/AstekGroup/ai-agent-google-adk-template/issues) sur GitHub
+- Consulter la [documentation](resources/) dans le dépôt
+- Référencer le [Guide Agents.md](Agents.md) pour les IA assistants
