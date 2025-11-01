@@ -2,12 +2,28 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-AstekGroup-blue)](https://github.com/AstekGroup/ai-agent-google-adk-template)
 [![License](https://img.shields.io/badge/License-Educational-yellow)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.11+-blue)](https://www.python.org/)
+[![Java](https://img.shields.io/badge/Java-17+-orange)](https://www.oracle.com/java/)
 
 **Date : Novembre 2025**
 
 Ce repository contient des templates complets pour créer des agents Google Agent Development Kit (ADK) en Python et Java, ainsi qu'une documentation exhaustive pour guider les développeurs et les IA.
 
 **Dépôt GitHub :** [https://github.com/AstekGroup/ai-agent-google-adk-template](https://github.com/AstekGroup/ai-agent-google-adk-template)
+
+## 📑 Table des matières
+
+- [🚀 Démarrage rapide](#-démarrage-rapide)
+- [📋 Prérequis](#-prérequis)
+- [📁 Structure du repository](#-structure-du-repository)
+- [💻 Utilisation rapide](#-utilisation-rapide)
+- [🎯 Templates disponibles](#-templates-disponibles)
+- [⚙️ Configuration](#️-configuration)
+- [📚 Documentation](#-documentation)
+- [🧪 Tests](#-tests)
+- [📦 Installation des dépendances](#-installation-des-dépendances)
+- [🤝 Contribution](#-contribution)
+- [🔗 Ressources externes](#-ressources-externes)
 
 ## 🚀 Démarrage rapide
 
@@ -20,11 +36,35 @@ cd ai-agent-google-adk-template
 git clone git@github.com:AstekGroup/ai-agent-google-adk-template.git
 ```
 
-## Structure du repository
+## 📋 Prérequis
+
+### Pour les templates Python
+
+- **Python** : Version 3.11 ou supérieure
+- **Gestionnaire de paquets** : Poetry ou uv (recommandé)
+- **Google ADK** : Version 1.3.0 ou supérieure
+- **Compte Google Cloud** : Pour utiliser Vertex AI ou AI Studio
+
+### Pour les templates Java
+
+- **Java** : Version 17 ou supérieure (JDK)
+- **Maven** : Version 3.8.0 ou supérieure
+- **Google ADK** : Version 1.3.0 ou supérieure
+- **Compte Google Cloud** : Pour utiliser Vertex AI ou AI Studio
+
+### Configuration Google Cloud
+
+Vous aurez besoin de :
+- Un projet Google Cloud avec Vertex AI activé (pour la production)
+- OU une clé API Google AI Studio (pour le développement)
+
+## 📁 Structure du repository
 
 ```
 .
+├── .gitignore                    # Fichiers ignorés par Git (Python, Java, IDE, etc.)
 ├── Agents.md                      # Guide complet pour les IA développant avec ADK
+├── README.md                      # Ce fichier - Documentation principale
 ├── resources/                     # Documentation complète sur Google ADK
 │   ├── README.md
 │   ├── 01-overview.md
@@ -40,7 +80,12 @@ git clone git@github.com:AstekGroup/ai-agent-google-adk-template.git
     ├── README.md                  # Index des templates
     ├── python/                    # Templates Python
     │   ├── README.md
-    │   └── simple-agent/         # Template agent simple
+    │   ├── simple-agent/         # Template agent simple
+    │   ├── sequential-agent/     # Pipeline séquentiel
+    │   ├── parallel-agent/       # Agents parallèles
+    │   ├── loop-agent/           # Boucle d'amélioration
+    │   ├── rag-agent/            # Agent avec RAG
+    │   └── custom-agent/         # Logique personnalisée
     ├── java/                      # Templates Java
     │   ├── README.md
     │   └── simple-agent/         # Template agent simple
@@ -64,23 +109,24 @@ git clone git@github.com:AstekGroup/ai-agent-google-adk-template.git
 2. **Référencer resources/** : Documentation exhaustive de l'API
 3. **Suivre les templates** : Exemples de code fonctionnels dans `templates/`
 
-## Templates disponibles
+## 🎯 Templates disponibles
 
 ### Python
 
-- **simple-agent** : Agent de base avec un outil (⭐ Débutant)
-- **sequential-agent** : Pipeline séquentiel (⭐⭐ Intermédiaire)
-- **parallel-agent** : Agents parallèles (⭐⭐ Intermédiaire)
-- **loop-agent** : Boucle d'amélioration (⭐⭐⭐ Avancé)
-- **rag-agent** : Agent avec RAG (⭐⭐ Intermédiaire)
-- **custom-agent** : Logique personnalisée (⭐⭐⭐ Avancé)
+- **[simple-agent](templates/python/simple-agent/)** : Agent de base avec un outil (⭐ Débutant)
+- **[sequential-agent](templates/python/sequential-agent/)** : Pipeline séquentiel (⭐⭐ Intermédiaire)
+- **[parallel-agent](templates/python/parallel-agent/)** : Agents parallèles (⭐⭐ Intermédiaire)
+- **[loop-agent](templates/python/loop-agent/)** : Boucle d'amélioration (⭐⭐⭐ Avancé)
+- **[rag-agent](templates/python/rag-agent/)** : Agent avec RAG (⭐⭐ Intermédiaire)
+- **[custom-agent](templates/python/custom-agent/)** : Logique personnalisée (⭐⭐⭐ Avancé)
 
 ### Java
 
-- **simple-agent** : Agent de base avec Maven (⭐ Débutant)
-- **multi-agent** : Orchestration multi-agents (⭐⭐⭐ Avancé)
+- **[simple-agent](templates/java/simple-agent/)** : Agent de base avec Maven (⭐ Débutant)
 
-## Documentation
+> **Note** : Consultez le [README des templates Python](templates/python/README.md) et [Java](templates/java/README.md) pour plus de détails sur chaque template.
+
+## 📚 Documentation
 
 ### Pour comprendre Google ADK
 
@@ -100,24 +146,119 @@ git clone git@github.com:AstekGroup/ai-agent-google-adk-template.git
 1. **[Déploiement](resources/06-deployment.md)** : Guides Vertex AI et Cloud Run
 2. **[Scripts de déploiement](templates/python/simple-agent/deployment/)** : Exemples dans les templates
 
+## ⚙️ Configuration
+
+### Variables d'environnement
+
+Chaque template contient un fichier `env.example` qu'il faut copier en `.env` et configurer :
+
+```bash
+# Copier le fichier d'exemple
+cp env.example .env
+```
+
+### Configuration minimale requise
+
+```bash
+# Backend LLM (1 pour Vertex AI, 0 pour AI Studio)
+GOOGLE_GENAI_USE_VERTEXAI=0
+
+# Configuration AI Studio (développement)
+GOOGLE_API_KEY=your-api-key-here
+
+# Configuration Vertex AI (production - optionnel)
+# GOOGLE_CLOUD_PROJECT=your-project-id
+# GOOGLE_CLOUD_LOCATION=us-central1
+
+# Configuration application
+APP_NAME=simple_agent
+LOG_LEVEL=INFO
+```
+
+> **Important** : Le fichier `.env` est ignoré par Git pour des raisons de sécurité. Ne jamais committer vos clés API.
+
+## 📦 Installation des dépendances
+
+### Pour les templates Python
+
+```bash
+# Avec Poetry (recommandé)
+cd templates/python/simple-agent/
+poetry install
+
+# Avec uv (alternative moderne)
+uv sync
+
+# Avec pip (si vous préférez)
+pip install -r requirements.txt
+```
+
+### Pour les templates Java
+
+```bash
+# Avec Maven
+cd templates/java/simple-agent/
+mvn clean install
+```
+
+## 🧪 Tests
+
+### Exécuter les tests Python
+
+```bash
+cd templates/python/simple-agent/
+poetry run pytest
+
+# Avec couverture
+poetry run pytest --cov=src tests/
+```
+
+### Exécuter les tests Java
+
+```bash
+cd templates/java/simple-agent/
+mvn test
+```
+
 ## Exemple rapide
 
-### Créer un agent simple
+### Créer un agent simple (Python)
 
 ```bash
 # 1. Copier le template
 cp -r templates/python/simple-agent/ my-agent/
+cd my-agent
 
 # 2. Installer les dépendances
-cd my-agent
 poetry install
+
+# 3. Configurer les variables d'environnement
+cp env.example .env
+# Éditer .env avec vos valeurs (GOOGLE_API_KEY)
+
+# 4. Exécuter les tests
+poetry run pytest
+
+# 5. Utiliser l'agent
+python -c "from src.simple_agent.agent import root_agent; print(root_agent)"
+```
+
+### Créer un agent simple (Java)
+
+```bash
+# 1. Copier le template
+cp -r templates/java/simple-agent/ my-agent/
+cd my-agent
+
+# 2. Compiler et tester
+mvn clean install
 
 # 3. Configurer
 cp env.example .env
 # Éditer .env avec vos valeurs
 
-# 4. Utiliser
-python -c "from src.simple_agent.agent import root_agent; print(root_agent)"
+# 4. Exécuter
+mvn exec:java -Dexec.mainClass="com.google.adk.samples.simpleagent.Main"
 ```
 
 ## Contribution
@@ -147,7 +288,7 @@ Ce dépôt est maintenu par l'organisation **AstekGroup**. Pour contribuer :
 - **Commits** : Utiliser des messages clairs et descriptifs
 - **Fichiers ignorés** : Vérifier `.gitignore` avant de committer
 
-## Ressources externes
+## 🔗 Ressources externes
 
 - [Documentation officielle ADK](https://google.github.io/adk-docs/)
 - [Exemples Google](https://github.com/google/adk-samples)
