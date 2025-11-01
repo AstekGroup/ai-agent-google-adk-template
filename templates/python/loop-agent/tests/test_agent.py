@@ -13,17 +13,18 @@ def test_loop_creation():
     assert root_agent.name == "iterative_writing_pipeline"
 
 
-def test_loop_execution():
+@pytest.mark.asyncio
+async def test_loop_execution():
     """Test exécution de la boucle."""
     session_service = InMemorySessionService()
     runner = Runner(
         agent=root_agent,
-        app_name="test_app",
+        app_name="agents",
         session_service=session_service
     )
     
-    session = session_service.create_session(
-        app_name="test_app",
+    session = await session_service.create_session(
+        app_name="agents",
         user_id="test_user",
         session_id="test_session",
         state={"topic": "A robot learning to paint"}
@@ -34,11 +35,13 @@ def test_loop_execution():
         parts=[types.Part(text="Generate and refine a story")]
     )
     
-    events = list(runner.run(
+    events = []
+    async for event in runner.run_async(
         user_id="test_user",
         session_id="test_session",
         new_message=content
-    ))
+    ):
+        events.append(event)
     
     assert len(events) > 0
     

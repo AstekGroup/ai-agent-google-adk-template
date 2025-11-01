@@ -13,17 +13,18 @@ def test_parallel_agent_creation():
     assert root_agent.name == "research_and_synthesis"
 
 
-def test_parallel_execution():
+@pytest.mark.asyncio
+async def test_parallel_execution():
     """Test exécution du pipeline parallèle."""
     session_service = InMemorySessionService()
     runner = Runner(
         agent=root_agent,
-        app_name="test_app",
+        app_name="agents",
         session_service=session_service
     )
     
-    session = session_service.create_session(
-        app_name="test_app",
+    session = await session_service.create_session(
+        app_name="agents",
         user_id="test_user",
         session_id="test_session"
     )
@@ -33,11 +34,13 @@ def test_parallel_execution():
         parts=[types.Part(text="Research sustainable technology trends")]
     )
     
-    events = list(runner.run(
+    events = []
+    async for event in runner.run_async(
         user_id="test_user",
         session_id="test_session",
         new_message=content
-    ))
+    ):
+        events.append(event)
     
     assert len(events) > 0
     

@@ -14,17 +14,18 @@ def test_agent_creation():
     assert len(root_agent.tools) > 0
 
 
-def test_agent_basic_interaction():
+@pytest.mark.asyncio
+async def test_agent_basic_interaction():
     """Test interaction basique avec l'agent."""
     session_service = InMemorySessionService()
     runner = Runner(
         agent=root_agent,
-        app_name="test_app",
+        app_name="agents",
         session_service=session_service
     )
     
-    session = session_service.create_session(
-        app_name="test_app",
+    session = await session_service.create_session(
+        app_name="agents",
         user_id="test_user",
         session_id="test_session"
     )
@@ -34,11 +35,13 @@ def test_agent_basic_interaction():
         parts=[types.Part(text="Hello, what can you do?")]
     )
     
-    events = list(runner.run(
+    events = []
+    async for event in runner.run_async(
         user_id="test_user",
         session_id="test_session",
         new_message=content
-    ))
+    ):
+        events.append(event)
     
     # Vérifier qu'on a reçu des événements
     assert len(events) > 0
@@ -66,17 +69,18 @@ def test_weather_tool():
     assert "message" in result
 
 
-def test_agent_weather_query():
+@pytest.mark.asyncio
+async def test_agent_weather_query():
     """Test de l'agent avec une requête météo."""
     session_service = InMemorySessionService()
     runner = Runner(
         agent=root_agent,
-        app_name="test_app",
+        app_name="agents",
         session_service=session_service
     )
     
-    session = session_service.create_session(
-        app_name="test_app",
+    session = await session_service.create_session(
+        app_name="agents",
         user_id="test_user",
         session_id="test_session"
     )
@@ -86,11 +90,13 @@ def test_agent_weather_query():
         parts=[types.Part(text="What's the weather in Paris?")]
     )
     
-    events = list(runner.run(
+    events = []
+    async for event in runner.run_async(
         user_id="test_user",
         session_id="test_session",
         new_message=content
-    ))
+    ):
+        events.append(event)
     
     # Vérifier qu'on a utilisé l'outil météo
     tool_calls = [

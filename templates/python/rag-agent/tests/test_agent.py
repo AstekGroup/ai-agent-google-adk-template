@@ -20,7 +20,8 @@ def test_rag_agent_creation():
     assert len(root_agent.tools) > 0
 
 
-def test_rag_query():
+@pytest.mark.asyncio
+async def test_rag_query():
     """Test requête RAG."""
     if not os.getenv("RAG_CORPUS"):
         pytest.skip("RAG_CORPUS not configured")
@@ -30,12 +31,12 @@ def test_rag_query():
     session_service = InMemorySessionService()
     runner = Runner(
         agent=root_agent,
-        app_name="test_app",
+        app_name="agents",
         session_service=session_service
     )
     
-    session = session_service.create_session(
-        app_name="test_app",
+    session = await session_service.create_session(
+        app_name="agents",
         user_id="test_user",
         session_id="test_session"
     )
@@ -45,10 +46,12 @@ def test_rag_query():
         parts=[types.Part(text="What information is available?")]
     )
     
-    events = list(runner.run(
+    events = []
+    async for event in runner.run_async(
         user_id="test_user",
         session_id="test_session",
         new_message=content
-    ))
+    ):
+        events.append(event)
     
     assert len(events) > 0

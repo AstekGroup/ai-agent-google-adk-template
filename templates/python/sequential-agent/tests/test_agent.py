@@ -14,17 +14,18 @@ def test_pipeline_creation():
     assert len(root_agent.sub_agents) == 3
 
 
-def test_pipeline_execution():
+@pytest.mark.asyncio
+async def test_pipeline_execution():
     """Test exécution complète du pipeline."""
     session_service = InMemorySessionService()
     runner = Runner(
         agent=root_agent,
-        app_name="test_app",
+        app_name="agents",
         session_service=session_service
     )
     
-    session = session_service.create_session(
-        app_name="test_app",
+    session = await session_service.create_session(
+        app_name="agents",
         user_id="test_user",
         session_id="test_session"
     )
@@ -34,11 +35,13 @@ def test_pipeline_execution():
         parts=[types.Part(text="Write a short paragraph about artificial intelligence")]
     )
     
-    events = list(runner.run(
+    events = []
+    async for event in runner.run_async(
         user_id="test_user",
         session_id="test_session",
         new_message=content
-    ))
+    ):
+        events.append(event)
     
     # Vérifier qu'on a reçu des événements
     assert len(events) > 0
@@ -50,8 +53,8 @@ def test_pipeline_execution():
     assert len(final_responses) > 0
     
     # Vérifier que le pipeline a produit du contenu final
-    final_session = session_service.get_session(
-        app_name="test_app",
+    final_session = await session_service.get_session(
+        app_name="agents",
         user_id="test_user",
         session_id="test_session"
     )

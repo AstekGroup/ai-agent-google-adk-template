@@ -14,17 +14,18 @@ def test_custom_agent_creation():
     assert isinstance(root_agent, type(root_agent).__bases__[0])
 
 
-def test_custom_agent_execution():
+@pytest.mark.asyncio
+async def test_custom_agent_execution():
     """Test exécution de l'agent personnalisé."""
     session_service = InMemorySessionService()
     runner = Runner(
         agent=root_agent,
-        app_name="test_app",
+        app_name="agents",
         session_service=session_service
     )
     
-    session = session_service.create_session(
-        app_name="test_app",
+    session = await session_service.create_session(
+        app_name="agents",
         user_id="test_user",
         session_id="test_session",
         state={"topic": "A robot learning to paint"}
@@ -35,11 +36,13 @@ def test_custom_agent_execution():
         parts=[types.Part(text="Generate a story")]
     )
     
-    events = list(runner.run(
+    events = []
+    async for event in runner.run_async(
         user_id="test_user",
         session_id="test_session",
         new_message=content
-    ))
+    ):
+        events.append(event)
     
     assert len(events) > 0
     

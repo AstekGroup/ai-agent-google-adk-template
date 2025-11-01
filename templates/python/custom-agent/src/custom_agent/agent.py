@@ -47,9 +47,10 @@ class StoryFlowAgent(BaseAgent):
             sub_agents=[story_generator, loop_agent, sequential_agent]
         )
         
-        self.story_generator = story_generator
-        self.loop_agent = loop_agent
-        self.sequential_agent = sequential_agent
+        # Stocker les références avec préfixe _ pour éviter les problèmes Pydantic
+        object.__setattr__(self, '_story_generator', story_generator)
+        object.__setattr__(self, '_loop_agent', loop_agent)
+        object.__setattr__(self, '_sequential_agent', sequential_agent)
 
     @override
     async def _run_async_impl(
@@ -58,18 +59,18 @@ class StoryFlowAgent(BaseAgent):
         """Logique d'orchestration personnalisée."""
         
         # Étape 1 : Génération initiale
-        async for event in self.story_generator.run_async(ctx):
+        async for event in self._story_generator.run_async(ctx):
             yield event
         
         if "current_story" not in ctx.session.state:
             return
         
         # Étape 2 : Boucle critique/revision
-        async for event in self.loop_agent.run_async(ctx):
+        async for event in self._loop_agent.run_async(ctx):
             yield event
         
         # Étape 3 : Vérification grammaire et ton
-        async for event in self.sequential_agent.run_async(ctx):
+        async for event in self._sequential_agent.run_async(ctx):
             yield event
         
         # Étape 4 : Régénération conditionnelle si ton négatif
@@ -77,7 +78,7 @@ class StoryFlowAgent(BaseAgent):
         
         if tone_result == "negative":
             # Régénérer l'histoire si le ton est négatif
-            async for event in self.story_generator.run_async(ctx):
+            async for event in self._story_generator.run_async(ctx):
                 yield event
 
 
