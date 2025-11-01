@@ -10,10 +10,20 @@ Agent Google ADK simple avec un outil de météo en Java.
 
 ## Installation
 
+### ⚠️ Note importante sur les dépendances
+
+**Les dépendances Google ADK Java ne sont pas encore disponibles publiquement dans Maven Central.**
+
+Si vous rencontrez des erreurs lors de l'installation des dépendances (`Could not find artifact com.google.adk:adk:jar:1.3.0`), consultez le fichier **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** pour les solutions possibles.
+
+### Installation des dépendances
+
 ```bash
 # Installer les dépendances
 mvn clean install
 ```
+
+**Si l'installation échoue**, suivez les instructions dans [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 ## Configuration
 

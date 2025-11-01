@@ -1,0 +1,579 @@
+# Règles Cursor - Template Google ADK
+
+**Date : Novembre 2025**
+
+Ce fichier contient les règles Cursor pour le repository de templates Google Agent Development Kit (ADK).
+
+## Vue d'ensemble du repository
+
+Ce repository est un **template repository** contenant :
+- Documentation complète sur Google ADK
+- Templates prêts à l'emploi (Python et Java)
+- Guides pour développeurs et IA
+- Patterns et best practices
+
+**Organisation GitHub** : AstekGroup  
+**Repository** : ai-agent-google-adk-template  
+**Branche principale** : main
+
+## Structure du repository
+
+```
+/
+├── .cursor/                    # Règles Cursor
+│   └── rules/
+│       └── google-adk-template.mdc
+├── Agents.md                   # Guide COMPLET pour les IA développant avec ADK
+├── README.md                   # Documentation principale
+├── resources/                  # Documentation exhaustive Google ADK
+│   ├── 01-overview.md         # Introduction au framework
+│   ├── 02-architecture.md     # Architecture et concepts
+│   ├── 03-getting-started.md  # Guide de démarrage
+│   ├── 04-api-reference.md    # Référence API complète
+│   ├── 05-examples-patterns.md # Exemples de code
+│   ├── 06-deployment.md       # Guides de déploiement
+│   ├── 07-tools-integrations.md # Outils et intégrations
+│   ├── 08-external-resources.md # Ressources externes
+│   └── 09-patterns-best-practices.md # Best practices
+└── templates/                  # Templates prêts à l'emploi
+    ├── python/                 # Templates Python
+    │   ├── simple-agent/       # Agent simple (⭐ Débutant)
+    │   ├── sequential-agent/   # Pipeline séquentiel (⭐⭐ Intermédiaire)
+    │   ├── parallel-agent/     # Agents parallèles (⭐⭐ Intermédiaire)
+    │   ├── loop-agent/         # Boucle d'amélioration (⭐⭐⭐ Avancé)
+    │   ├── rag-agent/          # Agent avec RAG (⭐⭐ Intermédiaire)
+    │   └── custom-agent/       # Logique personnalisée (⭐⭐⭐ Avancé)
+    ├── java/                   # Templates Java
+    │   └── simple-agent/       # Agent simple Maven (⭐ Débutant)
+    └── docs/                   # Documentation des templates
+        ├── README.md
+        └── CREATION_GUIDE.md   # Guide de création de templates
+```
+
+## Principes fondamentaux
+
+### 1. Ce repository est un TEMPLATE
+
+**IMPORTANT** : Ce repository n'est PAS un projet d'agent en lui-même, c'est une collection de templates à copier pour créer de nouveaux projets.
+
+**Ne JAMAIS** :
+- Créer des agents directement dans ce repository
+- Modifier les templates existants pour un cas d'usage spécifique
+- Ajouter des dépendances spécifiques à un projet
+
+**TOUJOURS** :
+- Copier un template vers un nouveau répertoire pour créer un projet
+- Maintenir les templates génériques et réutilisables
+- Documenter tout nouveau template créé
+
+### 2. Architecture Google ADK
+
+Google ADK propose plusieurs types d'agents :
+
+- **Agent (LlmAgent)** : Agent de base alimenté par un LLM
+- **SequentialAgent** : Exécution séquentielle d'agents
+- **ParallelAgent** : Exécution parallèle d'agents indépendants
+- **LoopAgent** : Exécution itérative avec condition de sortie
+- **BaseAgent** : Agent personnalisé avec logique d'orchestration
+
+### 3. Composants essentiels
+
+- **Runner** : Exécute les agents et gère leur cycle de vie
+- **SessionService** : Gère les sessions utilisateur (InMemorySessionService, etc.)
+- **MemoryService** : Gère la mémoire à long terme
+- **Tools** : Outils modulaires (FunctionTool, VertexAiRagRetrieval, etc.)
+- **Callbacks** : before_agent_callback, after_agent_callback
+
+## Utilisation des templates
+
+### Pour créer un nouveau projet agent
+
+1. **Identifier le besoin** :
+   - Agent simple → `templates/python/simple-agent/`
+   - Pipeline de traitement → `templates/python/sequential-agent/`
+   - Recherche multi-sources → `templates/python/parallel-agent/`
+   - Amélioration itérative → `templates/python/loop-agent/`
+   - Q&A sur documents → `templates/python/rag-agent/`
+   - Workflow personnalisé → `templates/python/custom-agent/`
+
+2. **Copier le template** :
+   ```bash
+   # HORS de ce repository
+   cp -r templates/python/simple-agent/ /path/to/new-project/
+   ```
+
+3. **Personnaliser** :
+   - Renommer le package dans `pyproject.toml`
+   - Configurer `.env` depuis `env.example`
+   - Modifier `src/agent_name/agent.py`
+   - Adapter les instructions système
+   - Ajouter/modifier les outils
+
+4. **Développer** :
+   ```bash
+   cd /path/to/new-project/
+   poetry install  # ou uv sync
+   poetry run pytest  # Tester
+   ```
+
+### Structure d'un projet agent créé depuis template
+
+```
+mon-agent/
+├── pyproject.toml          # Configuration Poetry/uv
+├── README.md               # Documentation du projet
+├── .env.example            # Exemple de variables
+├── .env                    # Variables (non versionné)
+├── src/
+│   └── mon_agent/
+│       ├── __init__.py
+│       ├── agent.py        # Agent principal (root_agent)
+│       ├── tools.py        # Outils personnalisés
+│       ├── sub_agents.py   # Sous-agents (si multi-agent)
+│       └── callbacks.py    # Callbacks (si nécessaire)
+├── tests/
+│   ├── __init__.py
+│   └── test_agent.py       # Tests unitaires
+└── deployment/
+    └── deploy.py           # Script de déploiement Vertex AI
+```
+
+## Règles de développement avec Google ADK
+
+### 1. Configuration de l'agent
+
+```python
+from google.adk.agents import Agent
+from google.adk.tools import FunctionTool
+
+# TOUJOURS définir un root_agent
+root_agent = Agent(
+    model="gemini-2.5-flash",  # ou gemini-2.5-pro, gemini-1.5-pro, etc.
+    name="mon_agent",
+    description="Description courte pour délégation multi-agent",
+    instruction="""Instructions système claires et précises.
+    
+    Décrire:
+    - Le rôle de l'agent
+    - Ses capacités
+    - Ses limites
+    - Le comportement attendu
+    """,
+    tools=[tool1, tool2]  # Liste d'outils
+)
+```
+
+### 2. Création d'outils
+
+```python
+from google.adk.tools import FunctionTool
+from typing import Literal
+
+def mon_outil(
+    param1: str,
+    param2: Literal["option1", "option2"] = "option1"
+) -> dict:
+    """
+    Description claire de l'outil.
+    
+    Args:
+        param1: Description du paramètre
+        param2: Description avec options
+    
+    Returns:
+        dict: Structure de retour documentée
+    """
+    # Implémentation
+    return {"status": "success", "data": {}}
+
+# Créer le FunctionTool
+mon_outil_tool = FunctionTool(mon_outil)
+```
+
+### 3. Multi-agent patterns
+
+**Sequential** (Pipeline) :
+```python
+from google.adk.agents import Agent, SequentialAgent
+
+agent1 = Agent(name="etape1", ...)
+agent2 = Agent(name="etape2", ...)
+agent3 = Agent(name="etape3", ...)
+
+root_agent = SequentialAgent(
+    name="pipeline",
+    sub_agents=[agent1, agent2, agent3]
+)
+```
+
+**Parallel** (Exécution parallèle) :
+```python
+from google.adk.agents import Agent, ParallelAgent
+
+recherche1 = Agent(name="source1", ...)
+recherche2 = Agent(name="source2", ...)
+recherche3 = Agent(name="source3", ...)
+
+root_agent = ParallelAgent(
+    name="recherche_parallele",
+    sub_agents=[recherche1, recherche2, recherche3]
+)
+```
+
+**Loop** (Amélioration itérative) :
+```python
+from google.adk.agents import Agent, LoopAgent
+from google.adk.tools import ToolContext
+
+def exit_loop(tool_context: ToolContext):
+    """Sortir de la boucle quand satisfait."""
+    tool_context.actions.escalate = True
+    return {}
+
+critique = Agent(name="critique", ...)
+amelioration = Agent(name="amelioration", tools=[exit_loop], ...)
+
+root_agent = LoopAgent(
+    name="boucle_amelioration",
+    sub_agents=[critique, amelioration],
+    max_iterations=5
+)
+```
+
+### 4. Exécution d'un agent
+
+```python
+from google.adk.runners import Runner
+from google.adk.sessions import InMemorySessionService
+from google.genai import types
+
+# Configuration
+session_service = InMemorySessionService()
+runner = Runner(
+    agent=root_agent,
+    app_name="mon_app",
+    session_service=session_service
+)
+
+# Créer une session
+session = session_service.create_session(
+    app_name="mon_app",
+    user_id="user123",
+    session_id="session001"
+)
+
+# Envoyer un message
+content = types.Content(
+    role='user',
+    parts=[types.Part(text="Votre message")]
+)
+
+# Exécuter
+events = runner.run(
+    user_id="user123",
+    session_id="session001",
+    new_message=content
+)
+
+# Traiter la réponse
+for event in events:
+    if event.is_final_response() and event.content:
+        print(event.content.parts[0].text)
+```
+
+### 5. Tests unitaires
+
+```python
+import pytest
+from google.adk.runners import Runner
+from google.adk.sessions import InMemorySessionService
+from google.genai import types
+from mon_agent.agent import root_agent
+
+def test_agent_basic():
+    """Test basique de l'agent."""
+    session_service = InMemorySessionService()
+    runner = Runner(
+        agent=root_agent,
+        app_name="test_app",
+        session_service=session_service
+    )
+    
+    session = session_service.create_session(
+        app_name="test_app",
+        user_id="test_user",
+        session_id="test_session"
+    )
+    
+    content = types.Content(
+        role='user',
+        parts=[types.Part(text="Test message")]
+    )
+    
+    events = runner.run(
+        user_id="test_user",
+        session_id="test_session",
+        new_message=content
+    )
+    
+    final_responses = [e for e in events if e.is_final_response()]
+    assert len(final_responses) > 0
+```
+
+## Configuration environnement
+
+### Variables essentielles (.env)
+
+```bash
+# Backend LLM (1 pour Vertex AI, 0 pour AI Studio)
+GOOGLE_GENAI_USE_VERTEXAI=0
+
+# Configuration AI Studio (développement)
+GOOGLE_API_KEY=your-api-key-here
+
+# Configuration Vertex AI (production)
+GOOGLE_CLOUD_PROJECT=your-project-id
+GOOGLE_CLOUD_LOCATION=us-central1
+
+# Configuration application
+APP_NAME=mon_agent
+LOG_LEVEL=INFO
+```
+
+### Obtenir les clés API
+
+- **AI Studio** (développement) : https://aistudio.google.com/apikey
+- **Vertex AI** (production) : Activer Vertex AI dans Google Cloud Console
+
+## Déploiement
+
+### Vertex AI Agent Engine
+
+```python
+from vertexai import agent_engines
+import os
+
+# 1. Builder le wheel
+# poetry build --format=wheel --out-dir deployment
+# ou: uv build --wheel --out-dir deployment
+
+# 2. Déployer
+reasoning_engine = agent_engines.ReasoningEngine.create(
+    reasoning_engine={
+        "display_name": "mon-agent",
+        "model_config": {"model": "gemini-2.5-flash"},
+        "source": {
+            "package_path": "deployment/mon_agent-1.0.0-py3-none-any.whl",
+            "entrypoint": "mon_agent.agent:root_agent",
+        },
+    }
+)
+```
+
+### Cloud Run (avec FastAPI/uvicorn)
+
+```dockerfile
+FROM python:3.11-slim
+
+RUN pip install --no-cache-dir uv==0.6.12
+
+WORKDIR /code
+
+COPY ./pyproject.toml ./README.md ./uv.lock* ./
+COPY ./src ./src
+
+RUN uv sync --frozen
+
+EXPOSE 8000
+
+CMD ["uv", "run", "uvicorn", "app.server:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+## Gestionnaires de paquets
+
+### Python
+
+**Recommandé** : uv (moderne et rapide)
+```bash
+uv sync              # Installer dépendances
+uv add package       # Ajouter une dépendance
+uv run pytest        # Exécuter commande
+```
+
+**Alternatif** : Poetry (standard)
+```bash
+poetry install       # Installer dépendances
+poetry add package   # Ajouter une dépendance
+poetry run pytest    # Exécuter commande
+```
+
+### Java
+
+**Maven** (standard)
+```bash
+mvn clean install    # Compiler et installer
+mvn test             # Exécuter tests
+mvn package          # Créer JAR
+```
+
+## Documentation de référence
+
+### À consulter en priorité
+
+1. **Agents.md** : Guide complet pour les IA avec tous les patterns
+2. **resources/** : Documentation exhaustive de Google ADK
+3. **templates/docs/CREATION_GUIDE.md** : Guide de création de templates
+
+### Documentation externe
+
+- Documentation officielle : https://google.github.io/adk-docs/
+- Exemples Google : https://github.com/google/adk-samples
+- Agent Starter Pack : https://github.com/GoogleCloudPlatform/agent-starter-pack
+
+## Contribution au repository de templates
+
+### Pour ajouter un nouveau template
+
+1. **Créer dans `templates/python/` ou `templates/java/`**
+2. **Suivre le guide** : `templates/docs/CREATION_GUIDE.md`
+3. **Structure minimale** :
+   - README.md complet
+   - Code source fonctionnel
+   - Tests unitaires
+   - Script de déploiement
+   - .env.example documenté
+
+4. **Ajouter une entrée** dans `templates/README.md`
+5. **Documenter** les patterns utilisés
+6. **Tester** le template de bout en bout
+
+### Standards de qualité
+
+- ✅ Code fonctionne sans erreur
+- ✅ Tests passent tous
+- ✅ Documentation complète
+- ✅ Déploiement testé
+- ✅ Exemples d'utilisation fournis
+- ✅ Variables d'environnement documentées
+- ✅ Générique et réutilisable
+
+## Best Practices Google ADK
+
+### 1. Instructions d'agent
+
+- **Claires et précises** : Décrire le rôle, capacités, limites
+- **Comportement attendu** : Fournir des exemples
+- **Format** : Utiliser des paragraphes structurés
+
+### 2. Outils (Tools)
+
+- **Docstrings complètes** : Description, Args, Returns
+- **Type hints** : Utiliser typing pour tous les paramètres
+- **Gestion d'erreurs** : Retourner des dicts structurés avec status
+- **Nommage** : Noms explicites et cohérents
+
+### 3. Gestion d'état
+
+- **session.state** : Pour l'état de session
+- **callback_context.state** : Dans les callbacks
+- **Préfixer** : `user:` pour artefacts utilisateur
+
+### 4. Performance
+
+- **ParallelAgent** : Pour tâches indépendantes
+- **Cache** : Mettre en cache les résultats coûteux
+- **Limiter** : max_iterations dans LoopAgent
+
+### 5. Sécurité
+
+- **Valider** : Entrées utilisateur
+- **Sanitizer** : Réponses avant affichage
+- **Secrets** : Variables d'environnement (.env)
+- **Ignorer** : .env dans .gitignore
+
+## Checklist développement agent
+
+Lors de la création d'un nouveau projet agent :
+
+- [ ] Template copié hors du repository de templates
+- [ ] pyproject.toml/pom.xml configuré (nom, version, auteur)
+- [ ] .env créé depuis .env.example
+- [ ] GOOGLE_API_KEY ou configuration Vertex AI définie
+- [ ] Agent principal (root_agent) défini avec instructions claires
+- [ ] Outils nécessaires implémentés avec docstrings
+- [ ] Tests unitaires créés et passants
+- [ ] README.md mis à jour avec instructions spécifiques
+- [ ] Script de déploiement adapté (si nécessaire)
+- [ ] Documentation architecture/workflow si complexe
+
+## Commandes fréquentes
+
+### Développement Python
+
+```bash
+# Installation
+poetry install  # ou: uv sync
+
+# Tests
+poetry run pytest  # ou: uv run pytest
+poetry run pytest --cov=src tests/  # Avec couverture
+
+# Build
+poetry build --format=wheel --out-dir deployment
+# ou: uv build --wheel --out-dir deployment
+
+# Exécution
+poetry run python -c "from src.agent_name.agent import root_agent; print(root_agent)"
+```
+
+### Développement Java
+
+```bash
+# Compilation et installation
+mvn clean install
+
+# Tests
+mvn test
+
+# Package
+mvn package
+
+# Exécution
+mvn exec:java -Dexec.mainClass="com.google.adk.samples.agent.Main"
+```
+
+## Modèles LLM disponibles
+
+Google ADK supporte plusieurs modèles via Vertex AI et AI Studio :
+
+- **gemini-2.5-flash** : Rapide, équilibré (recommandé par défaut)
+- **gemini-2.5-pro** : Plus puissant, meilleur raisonnement
+- **gemini-1.5-pro** : Version précédente stable
+- **gemini-1.5-flash** : Version précédente rapide
+
+**Autres** : OpenAI (GPT-4, GPT-3.5), Claude (via config)
+
+## Messages d'erreur courants
+
+### `GOOGLE_API_KEY` non défini
+→ Créer `.env` et définir `GOOGLE_API_KEY` ou configurer Vertex AI
+
+### Module `google.adk` introuvable
+→ Installer les dépendances : `poetry install` ou `uv sync`
+
+### Erreur d'authentification Vertex AI
+→ Vérifier `GOOGLE_CLOUD_PROJECT` et `gcloud auth login`
+
+### Tests échouent
+→ Vérifier la configuration `.env` et que l'API est accessible
+
+## Support
+
+Pour questions ou problèmes :
+- Consulter `Agents.md` pour guide complet
+- Consulter `resources/` pour documentation ADK
+- Ouvrir une issue sur le repository GitHub
+
+---
+
+**Note finale** : Ce repository est un **ensemble de templates** à copier, pas un projet agent en lui-même. Toujours créer de nouveaux projets **en dehors** de ce repository.

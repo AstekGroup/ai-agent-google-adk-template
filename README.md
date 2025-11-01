@@ -20,6 +20,7 @@ Ce repository contient des templates complets pour créer des agents Google Agen
 - [🎯 Templates disponibles](#-templates-disponibles)
 - [⚙️ Configuration](#️-configuration)
 - [📚 Documentation](#-documentation)
+  - [Règles Cursor](#règles-cursor)
 - [🧪 Tests](#-tests)
 - [📦 Installation des dépendances](#-installation-des-dépendances)
 - [🤝 Contribution](#-contribution)
@@ -62,6 +63,10 @@ Vous aurez besoin de :
 
 ```
 .
+├── .cursor/                      # Règles Cursor pour IA assistants
+│   ├── README.md
+│   └── rules/
+│       └── google-adk-template.mdc  # Règles complètes pour développement avec ADK
 ├── .gitignore                    # Fichiers ignorés par Git (Python, Java, IDE, etc.)
 ├── Agents.md                      # Guide complet pour les IA développant avec ADK
 ├── README.md                      # Ce fichier - Documentation principale
@@ -106,8 +111,11 @@ Vous aurez besoin de :
 ### Pour les IA assistants
 
 1. **Lire Agents.md** : Guide complet avec patterns et exemples
-2. **Référencer resources/** : Documentation exhaustive de l'API
-3. **Suivre les templates** : Exemples de code fonctionnels dans `templates/`
+2. **Consulter les règles Cursor** : `.cursor/rules/google-adk-template.mdc` pour instructions détaillées
+3. **Référencer resources/** : Documentation exhaustive de l'API
+4. **Suivre les templates** : Exemples de code fonctionnels dans `templates/`
+
+> **Note** : Si vous utilisez Cursor, les règles dans `.cursor/` sont automatiquement chargées et fournissent un contexte complet à l'IA pour vous aider dans le développement.
 
 ## 🎯 Templates disponibles
 
@@ -138,13 +146,30 @@ Vous aurez besoin de :
 ### Pour développer
 
 1. **[Agents.md](Agents.md)** : Guide complet pour les IA avec patterns
-2. **[Patterns et best practices](resources/09-patterns-best-practices.md)** : Architecture et bonnes pratiques
-3. **[Exemples](resources/05-examples-patterns.md)** : Exemples de code détaillés
+2. **[Règles Cursor](.cursor/rules/google-adk-template.mdc)** : Instructions complètes pour IA assistants
+3. **[Patterns et best practices](resources/09-patterns-best-practices.md)** : Architecture et bonnes pratiques
+4. **[Exemples](resources/05-examples-patterns.md)** : Exemples de code détaillés
 
 ### Pour déployer
 
 1. **[Déploiement](resources/06-deployment.md)** : Guides Vertex AI et Cloud Run
 2. **[Scripts de déploiement](templates/python/simple-agent/deployment/)** : Exemples dans les templates
+
+### Règles Cursor
+
+Ce repository inclut des règles Cursor complètes dans `.cursor/rules/` qui fournissent :
+
+- ✅ **Contexte complet** du repository de templates
+- ✅ **Instructions d'utilisation** des templates Python et Java
+- ✅ **Patterns Google ADK** : Simple, Sequential, Parallel, Loop, RAG, Custom
+- ✅ **Best practices** : Configuration, sécurité, performance
+- ✅ **Exemples de code** pour chaque pattern
+- ✅ **Checklist de développement** pour créer de nouveaux agents
+- ✅ **Commandes fréquentes** : Installation, tests, build, déploiement
+
+**Utilisation** : Les règles sont automatiquement chargées par Cursor et aident l'IA à vous assister dans le développement avec Google ADK.
+
+Pour plus de détails, consultez [.cursor/README.md](.cursor/README.md).
 
 ## ⚙️ Configuration
 
