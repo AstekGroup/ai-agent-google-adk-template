@@ -13,6 +13,7 @@ Ce répertoire contient toutes les ressources documentaires sur le framework Goo
 - **[Outils et intégrations](./07-tools-integrations.md)** : Outils disponibles, intégrations tierces
 - **[Ressources externes](./08-external-resources.md)** : Liens vers documentation officielle, vidéos, cours
 - **[Patterns et best practices](./09-patterns-best-practices.md)** : Patterns d'architecture et bonnes pratiques
+- **[Contrôle qualité et évaluation](./10-quality-control-evaluation.md)** : Framework d'évaluation, critères de qualité, surveillance et observabilité
 
 ## Sources
 
